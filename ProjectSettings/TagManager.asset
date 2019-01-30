@@ -40,10 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 178535749
-    locked: 0
+    locked: 1
   - name: Mountains
     uniqueID: 490056819
-    locked: 0
+    locked: 1
   - name: Tress
     uniqueID: 3907384311
     locked: 0
