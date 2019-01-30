@@ -8,6 +8,8 @@ public class FallowPath : MonoBehaviour
     public float speed = 5f;
     public float maxDistanceToGoal = 0.1f;
 
+    public enum FollowType { MoveTowards, Lerp}
+    public FollowType type = FollowType.MoveTowards;
 
     IEnumerator<Transform> _currentPoint;
     float maxDistanceToGoalSQR;
@@ -37,7 +39,15 @@ public class FallowPath : MonoBehaviour
             return;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, _currentPoint.Current.position, Time.deltaTime * speed);
+        if (type == FollowType.MoveTowards)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _currentPoint.Current.position, Time.deltaTime * speed);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, _currentPoint.Current.position, Time.deltaTime * speed);
+        }
+
 
         var distanceSQR = (transform.position - _currentPoint.Current.position).sqrMagnitude;
         if (distanceSQR < maxDistanceToGoalSQR)
