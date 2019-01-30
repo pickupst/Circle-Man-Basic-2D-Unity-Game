@@ -13,7 +13,7 @@ TextureImporter:
     21300016: Cannon
     21300018: Jump pad
     21300020: Upper cave
-    21300022: Dirt
+    21300022: Platform
     21300024: Lower cave
     21300026: Tree
     21300028: Tube
@@ -319,15 +319,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Dirt
+      name: Platform
       rect:
         serializedVersion: 2
         x: 1639
         y: 1427
         width: 368
         height: 93
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
