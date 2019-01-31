@@ -17,13 +17,18 @@ public class CharacterController : MonoBehaviour
 
     Transform _transform;
 
-    const float SkinWidth = 0.02f; 
+    const float SkinWidth = 0.02f;
+    const int TotalHorizontalRay = 8;
+
+    float _verticalDistanceBetweenRays;
 
     private void Awake()
     {
         _boxCollider2D = GetComponent<BoxCollider2D>();
         _localScale = transform.localScale;
         _transform = transform;
+        var colliderHight = (_boxCollider2D.size.y * Mathf.Abs(transform.localScale.y) - (2 * SkinWidth));
+        _verticalDistanceBetweenRays = colliderHight / (TotalHorizontalRay - 1);
     }
 
     public void LateUpdate()
@@ -47,19 +52,22 @@ public class CharacterController : MonoBehaviour
         var rayDistance = Mathf.Abs(deltaMovement.x) + SkinWidth;
         var rayDirection = isGoingRight ? Vector2.right : -Vector2.right;
         var rayOrigin = _raycastBottomRight;
-        var rayVector = rayOrigin;
+        
 
-        var raycastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
-
-        if (!raycastHit)
+        for (int i = 0; i < TotalHorizontalRay; i++)
         {
-            return;
+            var rayVector = new Vector2(rayOrigin.x, rayOrigin.y + i * _verticalDistanceBetweenRays);
+
+            var raycastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
+
+            if (!raycastHit)
+            {
+                continue;
+            }
+
+            deltaMovement.x = raycastHit.point.x - rayVector.x;
+            deltaMovement.x -= SkinWidth;
         }
-
-        //Destroy(raycastHit.transform.gameObject);
-
-        deltaMovement.x = raycastHit.point.x - rayVector.x;
-        deltaMovement.x -= SkinWidth;
     }
 
     private void CalculateRayOrigins()
