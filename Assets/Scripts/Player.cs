@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
             _normalHorizontalSpeed = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (_controller.CanJump && Input.GetKeyDown(KeyCode.Space))
         {
             _controller.Jump();
         }

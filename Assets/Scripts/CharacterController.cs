@@ -9,6 +9,8 @@ public class CharacterController : MonoBehaviour
     public LayerMask PlatformMask;
     public Vector2 Velocity { get { return _velocity; } }
     public ControllerState2D State { get; private set; }
+    public ControllerParamaters DefaultParameters;
+    public ControllerParamaters Parameters { get { return _OverrideParameters ?? DefaultParameters; } }
 
     BoxCollider2D _boxCollider2D;
     Vector2 _velocity;
@@ -19,12 +21,14 @@ public class CharacterController : MonoBehaviour
     Vector3 _raycastTopLeft;
 
     Transform _transform;
-
+    ControllerParamaters _OverrideParameters;
+    
     const float SkinWidth = 0.02f;
     const int TotalHorizontalRay = 8;
 
     float _verticalDistanceBetweenRays;
     float _horizontalDistanceBetweenRays;
+    float _jumpIn;
 
     private void Awake()
     {
@@ -43,14 +47,36 @@ public class CharacterController : MonoBehaviour
 
     public void LateUpdate()
     {
-        _velocity.y += -25f * Time.deltaTime;
+        _jumpIn -= Time.deltaTime;
+
+        _velocity.y += Parameters.Gravity * Time.deltaTime;
 
         Move(Velocity * Time.deltaTime);
     }
 
+    public bool CanJump
+    {
+        get
+        {
+            if (Parameters.JumpRestrictions == ControllerParamaters.JumpBehavior.CanJumpAnywhere)
+            {
+                return _jumpIn <= 0;
+            }
+            else if (Parameters.JumpRestrictions == ControllerParamaters.JumpBehavior.CanJumpOnGround)
+            {
+                return State.IsGrounded;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     public void Jump()
     {
-        AddForce(new Vector2(0, 16f));
+        AddForce(new Vector2(0, Parameters.JumpMagnitude));
+        _jumpIn = Parameters.JumpFrequency;
     }
 
     public void AddForce(Vector2 vector2)
@@ -60,6 +86,8 @@ public class CharacterController : MonoBehaviour
 
     private void Move(Vector2 deltaMovement)
     {
+        State.Reset();
+
         CalculateRayOrigins();
 
         MoveHorizontaly(ref deltaMovement);
