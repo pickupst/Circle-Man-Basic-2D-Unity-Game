@@ -8,6 +8,7 @@ public class CharacterController : MonoBehaviour
 
     public LayerMask PlatformMask;
     public Vector2 Velocity { get { return _velocity; } }
+    public ControllerState2D State { get; private set; }
 
     BoxCollider2D _boxCollider2D;
     Vector2 _velocity;
@@ -27,6 +28,8 @@ public class CharacterController : MonoBehaviour
 
     private void Awake()
     {
+        State = new ControllerState2D();
+
         _boxCollider2D = GetComponent<BoxCollider2D>();
         _localScale = transform.localScale;
         _transform = transform;
@@ -45,6 +48,16 @@ public class CharacterController : MonoBehaviour
         Move(Velocity * Time.deltaTime);
     }
 
+    public void Jump()
+    {
+        AddForce(new Vector2(0, 16f));
+    }
+
+    public void AddForce(Vector2 vector2)
+    {
+        _velocity += vector2;
+    }
+
     private void Move(Vector2 deltaMovement)
     {
         CalculateRayOrigins();
@@ -54,6 +67,11 @@ public class CharacterController : MonoBehaviour
         MoveVerticaly(ref deltaMovement);
 
         _transform.Translate(deltaMovement, Space.World);
+
+        if (Time.deltaTime > 0)
+        {
+            _velocity = deltaMovement / Time.deltaTime;
+        }
 
     }
 
@@ -79,14 +97,14 @@ public class CharacterController : MonoBehaviour
             deltaMovement.y = raycastHit.point.y - rayVector.y;
             if (isGoingUp)
             {
+                State.IsCollidingAbove = true;
                 deltaMovement.y -= SkinWidth;
             }
             else
             {
+                State.IsCollidingBelow = true;
                 deltaMovement.y += SkinWidth;
             }
-
-            _velocity.y = 0;
 
         }
 
@@ -120,9 +138,16 @@ public class CharacterController : MonoBehaviour
             deltaMovement.x = raycastHit.point.x - rayVector.x;
 
             if (isGoingRight)
+            {
+                State.IsCollidingRight = true;
                 deltaMovement.x -= SkinWidth;
+            }
             else
+            {
+                State.IsCollidingLeft = true;
                 deltaMovement.x += SkinWidth;
+            }
+           
 
         }
     }

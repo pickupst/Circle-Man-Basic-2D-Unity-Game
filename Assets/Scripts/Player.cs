@@ -6,6 +6,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 8f;
+    public float SpeedAccelerationOnGround = 10f;
+    public float SpeedAccelerationInAir = 5f;
 
     CharacterController _controller;
 
@@ -26,7 +28,10 @@ public class Player : MonoBehaviour
     {
 
         HandleInput();
-        _controller.SetHorizontalForce(Mathf.Lerp(_controller.Velocity.x, _normalHorizontalSpeed * speed, Time.deltaTime));
+
+        var movementFactor = _controller.State.IsGrounded ? SpeedAccelerationOnGround : SpeedAccelerationInAir;
+
+        _controller.SetHorizontalForce(Mathf.Lerp(_controller.Velocity.x, _normalHorizontalSpeed * speed, Time.deltaTime * movementFactor));
 
     }
 
@@ -53,6 +58,11 @@ public class Player : MonoBehaviour
         {
             _normalHorizontalSpeed = 0;
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _controller.Jump();
+        }
     }
 
     private void Flip()
@@ -64,3 +74,5 @@ public class Player : MonoBehaviour
 
     }
 }
+
+
