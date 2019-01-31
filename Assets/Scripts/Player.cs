@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed = 8f;
 
     CharacterController _controller;
     private int _normalHorizontalSpeed;
@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     {
 
         HandleInput();
+        _controller.SetHorizontalForce(Mathf.Lerp(_controller.Velocity.x, _normalHorizontalSpeed * speed, Time.deltaTime));
 
     }
 
@@ -49,8 +50,6 @@ public class Player : MonoBehaviour
         {
             _normalHorizontalSpeed = 0;
         }
-
-        _controller.SetHorizontalForce(_normalHorizontalSpeed * speed);
     }
 
     private void Flip()
