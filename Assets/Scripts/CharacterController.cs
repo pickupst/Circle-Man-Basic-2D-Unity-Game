@@ -14,6 +14,7 @@ public class CharacterController : MonoBehaviour
     
     Vector3 _localScale;
     Vector3 _raycastBottomRight;
+    Vector3 _raycastBottomLeft;
 
     Transform _transform;
 
@@ -51,8 +52,14 @@ public class CharacterController : MonoBehaviour
         var isGoingRight = deltaMovement.x > 0;
         var rayDistance = Mathf.Abs(deltaMovement.x) + SkinWidth;
         var rayDirection = isGoingRight ? Vector2.right : -Vector2.right;
-        var rayOrigin = _raycastBottomRight;
-        
+
+        Vector3 rayOrigin;
+        if (isGoingRight)
+            rayOrigin = _raycastBottomRight;
+        else
+            rayOrigin = _raycastBottomLeft;
+
+
 
         for (int i = 0; i < TotalHorizontalRay; i++)
         {
@@ -66,7 +73,12 @@ public class CharacterController : MonoBehaviour
             }
 
             deltaMovement.x = raycastHit.point.x - rayVector.x;
-            deltaMovement.x -= SkinWidth;
+
+            if (isGoingRight)
+                deltaMovement.x -= SkinWidth;
+            else
+                deltaMovement.x += SkinWidth;
+
         }
     }
 
@@ -81,6 +93,9 @@ public class CharacterController : MonoBehaviour
 
         _raycastBottomRight = _transform.position + new Vector3(center.x + size.x - SkinWidth,
                                                                 center.y - size.y + SkinWidth);
+
+        _raycastBottomLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth,
+                                                               center.y - size.y + SkinWidth);
 
 
     }
