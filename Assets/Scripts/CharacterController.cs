@@ -15,6 +15,7 @@ public class CharacterController : MonoBehaviour
     Vector3 _localScale;
     Vector3 _raycastBottomRight;
     Vector3 _raycastBottomLeft;
+    Vector3 _raycastTopLeft;
 
     Transform _transform;
 
@@ -22,18 +23,25 @@ public class CharacterController : MonoBehaviour
     const int TotalHorizontalRay = 8;
 
     float _verticalDistanceBetweenRays;
+    float _horizontalDistanceBetweenRays;
 
     private void Awake()
     {
         _boxCollider2D = GetComponent<BoxCollider2D>();
         _localScale = transform.localScale;
         _transform = transform;
+
         var colliderHight = (_boxCollider2D.size.y * Mathf.Abs(transform.localScale.y) - (2 * SkinWidth));
-        _verticalDistanceBetweenRays = colliderHight / (TotalHorizontalRay - 1);
+        _horizontalDistanceBetweenRays = colliderHight / (TotalHorizontalRay - 1);
+
+        var colliderWidth = (_boxCollider2D.size.x * Mathf.Abs(transform.localScale.x) - (2 * SkinWidth));
+        _verticalDistanceBetweenRays = colliderWidth / (TotalHorizontalRay - 1);
     }
 
     public void LateUpdate()
     {
+        _velocity.y += -25f * Time.deltaTime;
+
         Move(Velocity * Time.deltaTime);
     }
 
@@ -43,7 +51,44 @@ public class CharacterController : MonoBehaviour
 
         MoveHorizontaly(ref deltaMovement);
 
+        MoveVerticaly(ref deltaMovement);
+
         _transform.Translate(deltaMovement, Space.World);
+
+    }
+
+    private void MoveVerticaly(ref Vector2 deltaMovement)
+    {
+        var isGoingUp = deltaMovement.y > 0;
+        var rayDistance = Mathf.Abs(deltaMovement.y) + SkinWidth;
+        var rayDirection = isGoingUp ? Vector2.up : -Vector2.up;
+        var rayOrigin = isGoingUp ? _raycastTopLeft : _raycastBottomLeft;
+        rayOrigin.x += deltaMovement.x;
+
+        for (int i = 0; i < TotalHorizontalRay; i++)
+        {
+            var rayVector = new Vector2(rayOrigin.x + (i * _verticalDistanceBetweenRays), rayOrigin.y);
+            var raycastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
+
+
+            if (!raycastHit)
+            {
+                continue;
+            }
+
+            deltaMovement.y = raycastHit.point.y - rayVector.y;
+            if (isGoingUp)
+            {
+                deltaMovement.y -= SkinWidth;
+            }
+            else
+            {
+                deltaMovement.y += SkinWidth;
+            }
+
+            _velocity.y = 0;
+
+        }
 
     }
 
@@ -63,7 +108,7 @@ public class CharacterController : MonoBehaviour
 
         for (int i = 0; i < TotalHorizontalRay; i++)
         {
-            var rayVector = new Vector2(rayOrigin.x, rayOrigin.y + i * _verticalDistanceBetweenRays);
+            var rayVector = new Vector2(rayOrigin.x, rayOrigin.y + i * _horizontalDistanceBetweenRays);
 
             var raycastHit = Physics2D.Raycast(rayVector, rayDirection, rayDistance, PlatformMask);
 
@@ -97,6 +142,8 @@ public class CharacterController : MonoBehaviour
         _raycastBottomLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth,
                                                                center.y - size.y + SkinWidth);
 
+        _raycastTopLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth,
+                                                            center.y + size.y - SkinWidth);
 
     }
 
