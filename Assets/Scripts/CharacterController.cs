@@ -22,7 +22,9 @@ public class CharacterController : MonoBehaviour
 
     Transform _transform;
     ControllerParamaters _OverrideParameters;
-    
+
+    private static readonly float SlopeLimitTan = Mathf.Tan(75f * Mathf.Deg2Rad);
+
     const float SkinWidth = 0.02f;
     const int TotalHorizontalRay = 8;
 
@@ -86,11 +88,21 @@ public class CharacterController : MonoBehaviour
 
     private void Move(Vector2 deltaMovement)
     {
+        var wasGrounded = State.IsCollidingBelow;
+
         State.Reset();
 
         CalculateRayOrigins();
 
-        MoveHorizontaly(ref deltaMovement);
+        if (deltaMovement.y < 0 && wasGrounded)
+        {
+            HandleVerticalSlope(ref deltaMovement);
+        }
+
+        if (Mathf.Abs(deltaMovement.x) > 0.0001f)
+        {
+            MoveHorizontaly(ref deltaMovement);
+        }
 
         MoveVerticaly(ref deltaMovement);
 
@@ -99,6 +111,12 @@ public class CharacterController : MonoBehaviour
         if (Time.deltaTime > 0)
         {
             _velocity = deltaMovement / Time.deltaTime;
+        }
+
+        if (State.IsMovingUpSlope)
+        {
+            _velocity.y = 0;
+
         }
 
     }
@@ -132,6 +150,11 @@ public class CharacterController : MonoBehaviour
             {
                 State.IsCollidingBelow = true;
                 deltaMovement.y += SkinWidth;
+            }
+
+            if (!isGoingUp && deltaMovement.y > 0.0001f)
+            {
+                State.IsMovingUpSlope = true;
             }
 
         }
@@ -201,7 +224,7 @@ public class CharacterController : MonoBehaviour
             return true;
         }
 
-        if (deltaMovement.y > .2f)
+        if (_jumpIn > 0)
         {
             return true;
         }
@@ -211,6 +234,41 @@ public class CharacterController : MonoBehaviour
         State.IsCollidingBelow = true;
 
         return true;
+
+    }
+
+    private void HandleVerticalSlope(ref Vector2 deltaMovement)
+    {
+        var center = (_raycastBottomLeft.x + _raycastBottomRight.x) / 2;
+        var direction = -Vector2.up;
+        var slopeDistance = SlopeLimitTan * (_raycastBottomRight.x - center);
+        var slopeRayVector = new Vector2(center, _raycastBottomLeft.y);
+
+        var raycastHit = Physics2D.Raycast(slopeRayVector, direction, slopeDistance, PlatformMask);
+
+        if (raycastHit == null)
+        {
+            return;
+        }
+
+        var isMovingDownSlope = Mathf.Sign(raycastHit.normal.x) == Mathf.Sign(deltaMovement.x);
+
+        if (!isMovingDownSlope)
+        {
+            return;
+        }
+
+        var angle = Vector2.Angle(raycastHit.normal, Vector2.up);
+
+        if (Mathf.Abs (angle) < .0001f)
+        {
+            return;
+        }
+
+        State.IsMovingDownSlope = true;
+        State.SlopeAngle = angle;
+
+        deltaMovement.y = raycastHit.point.y - slopeRayVector.y;
 
     }
 

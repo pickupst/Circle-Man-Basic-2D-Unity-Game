@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8dc9f681048a94087f79ccc38f94a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 12
   SpeedAccelerationOnGround: 10
   SpeedAccelerationInAir: 5
 --- !u!114 &8867178757661098563
@@ -236,7 +236,7 @@ MonoBehaviour:
     SlopeLimit: 30
     Gravity: -25
     JumpFrequency: 0.75
-    JumpMagnitude: 16
+    JumpMagnitude: 20
 --- !u!50 &1668448656
 Rigidbody2D:
   serializedVersion: 4
