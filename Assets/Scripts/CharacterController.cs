@@ -163,6 +163,13 @@ public class CharacterController : MonoBehaviour
                 continue;
             }
 
+            if (i == 0 && HandleHorizontalSlope(ref deltaMovement, Vector2.Angle(raycastHit.normal, Vector2.up), isGoingRight))
+            {
+
+                break;
+
+            }
+
             deltaMovement.x = raycastHit.point.x - rayVector.x;
 
             if (isGoingRight)
@@ -178,6 +185,33 @@ public class CharacterController : MonoBehaviour
            
 
         }
+    }
+
+    private bool HandleHorizontalSlope(ref Vector2 deltaMovement, float angle, bool isGoingRight)
+    {
+
+        if (Mathf.RoundToInt(angle) >= 90)
+        {
+            return false;
+        }
+
+        if (angle > Parameters.SlopeLimit)
+        {
+            deltaMovement.x = 0;
+            return true;
+        }
+
+        if (deltaMovement.y > .2f)
+        {
+            return true;
+        }
+
+        deltaMovement.y = Mathf.Abs(Mathf.Tan(angle * Mathf.Deg2Rad)) * deltaMovement.x;
+        State.IsMovingUpSlope = true;
+        State.IsCollidingBelow = true;
+
+        return true;
+
     }
 
     private void CalculateRayOrigins()
