@@ -11,6 +11,9 @@ public class CharacterController : MonoBehaviour
     public ControllerState2D State { get; private set; }
     public ControllerParamaters DefaultParameters;
     public ControllerParamaters Parameters { get { return _OverrideParameters ?? DefaultParameters; } }
+    public GameObject StandingOn { get; private set; }
+
+    private GameObject _lastStandingOn;
 
     BoxCollider2D _boxCollider2D;
     Vector2 _velocity;
@@ -19,6 +22,8 @@ public class CharacterController : MonoBehaviour
     Vector3 _raycastBottomRight;
     Vector3 _raycastBottomLeft;
     Vector3 _raycastTopLeft;
+    Vector3 _activeGlobalPlatformPoint;
+    Vector3 _activeLocalPlatformPoint;
 
     Transform _transform;
     ControllerParamaters _OverrideParameters;
@@ -86,11 +91,20 @@ public class CharacterController : MonoBehaviour
         _velocity += vector2;
     }
 
+    public void SetVerticalForce(float y)
+    {
+
+        _velocity.y = y;
+
+    }
+
     private void Move(Vector2 deltaMovement)
     {
         var wasGrounded = State.IsCollidingBelow;
 
         State.Reset();
+
+        Handleplatforms();
 
         CalculateRayOrigins();
 
@@ -119,6 +133,34 @@ public class CharacterController : MonoBehaviour
 
         }
 
+        if (StandingOn != null)
+        {
+            _activeGlobalPlatformPoint = transform.position;
+            _activeLocalPlatformPoint = StandingOn.transform.InverseTransformPoint(transform.position);
+
+            if (_lastStandingOn != StandingOn)
+            {
+                StandingOn.SendMessage("ControllerEnter2D", this, SendMessageOptions.DontRequireReceiver);
+                _lastStandingOn = StandingOn;
+            }
+        }
+
+    }
+
+    private void Handleplatforms()
+    {
+        if (StandingOn != null)
+        {
+            var globalPlatformPoint = StandingOn.transform.TransformPoint(_activeLocalPlatformPoint);
+            var moveDistance = globalPlatformPoint - _activeGlobalPlatformPoint;
+
+            if (moveDistance != Vector3.zero)
+            {
+                transform.Translate(moveDistance, Space.World);
+            }
+        }
+
+        StandingOn = null;
     }
 
     private void MoveVerticaly(ref Vector2 deltaMovement)
@@ -138,6 +180,12 @@ public class CharacterController : MonoBehaviour
             if (!raycastHit)
             {
                 continue;
+            }
+
+            if (!isGoingUp)
+            {
+                StandingOn = raycastHit.collider.gameObject;
+                Debug.Log(StandingOn.name);
             }
 
             deltaMovement.y = raycastHit.point.y - rayVector.y;
@@ -246,7 +294,7 @@ public class CharacterController : MonoBehaviour
 
         var raycastHit = Physics2D.Raycast(slopeRayVector, direction, slopeDistance, PlatformMask);
 
-        if (raycastHit == null)
+        if (!raycastHit)
         {
             return;
         }
