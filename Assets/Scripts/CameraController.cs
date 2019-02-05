@@ -11,8 +11,11 @@ public class CameraController : MonoBehaviour
 
     public Vector3 _min, _max;
 
-    public float margin = 0;
+    public Vector2 smoothing;
+    public Vector2 followMargin;
 
+    public float boundsMargin = 0;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -29,13 +32,20 @@ public class CameraController : MonoBehaviour
         var x = transform.position.x;
         var y = transform.position.y;
 
-        x = player.position.x;
-        y = player.position.y;
+        x = Mathf.Lerp(x, player.position.x, smoothing.x * Time.deltaTime);
+        y = Mathf.Lerp(y, player.position.y, smoothing.y * Time.deltaTime);
 
         var cameraHalfwidth = Camera.main.orthographicSize * ((float) Screen.width / Screen.height);
 
-        x = Mathf.Clamp(x, _min.x + cameraHalfwidth + margin, _max.x - cameraHalfwidth - margin);
-        y = Mathf.Clamp(y, _min.y + Camera.main.orthographicSize + margin, _max.y - Camera.main.orthographicSize - margin);
+        if (Mathf.Abs(x - player.position.x) > followMargin.x)
+        {
+            x = Mathf.Clamp(x, _min.x + cameraHalfwidth + boundsMargin, _max.x - cameraHalfwidth - boundsMargin);
+        }
+        if (Mathf.Abs(y - player.position.y) > followMargin.y)
+        {
+            y = Mathf.Clamp(y, _min.y + Camera.main.orthographicSize + boundsMargin, _max.y - Camera.main.orthographicSize - boundsMargin);
+        }
+        
 
 
         transform.position = new Vector3(x, y, transform.position.z);

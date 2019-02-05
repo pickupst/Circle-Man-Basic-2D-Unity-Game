@@ -390,7 +390,9 @@ MonoBehaviour:
   bounds: {fileID: 691392719}
   _min: {x: 0, y: 0, z: 0}
   _max: {x: 0, y: 0, z: 0}
-  margin: 0
+  smoothing: {x: 2, y: 2}
+  followMargin: {x: 1, y: 0.5}
+  boundsMargin: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
