@@ -35,6 +35,18 @@ public class Player : MonoBehaviour
 
     }
 
+    public void RespawnAt(Transform spawnPoint)
+    {
+
+        if (!_isFacingRight)
+        {
+            Flip();
+        }
+
+        transform.position = spawnPoint.position;
+
+    }
+
     private void HandleInput()
     {
 
