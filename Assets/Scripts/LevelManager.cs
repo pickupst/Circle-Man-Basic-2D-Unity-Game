@@ -39,9 +39,11 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator KillPlayerCo()
     {
-        _checkPoints[0].SpawnPlayer(player);
+        player.Kill();
 
         yield return new WaitForSeconds(2f);
+
+        _checkPoints[0].SpawnPlayer(player);
 
     }
 }

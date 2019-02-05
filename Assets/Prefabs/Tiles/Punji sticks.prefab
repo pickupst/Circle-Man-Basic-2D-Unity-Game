@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1010484826549949925}
   - component: {fileID: 2148666843303178068}
   - component: {fileID: 974415337}
+  - component: {fileID: 974415338}
   m_Layer: 8
   m_Name: Punji sticks
   m_TagString: Untagged
@@ -106,3 +107,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.68, y: 2.7996774}
   m_EdgeRadius: 0
+--- !u!114 &974415338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7718296720360753386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac3e88080815d74a8582bdc9d4eb4fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

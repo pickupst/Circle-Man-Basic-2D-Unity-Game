@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public float SpeedAccelerationOnGround = 10f;
     public float SpeedAccelerationInAir = 5f;
 
+    public bool IsDead { get; private set; }
+
     CharacterController _controller;
 
     int _normalHorizontalSpeed;
@@ -19,6 +21,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        IsDead = false;
         _controller = GetComponent<CharacterController>();
         _isFacingRight = transform.localScale.x > 0;
     }
@@ -27,11 +30,35 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        HandleInput();
+        if (!IsDead)
+        {
+            HandleInput();
+        }
 
         var movementFactor = _controller.State.IsGrounded ? SpeedAccelerationOnGround : SpeedAccelerationInAir;
 
-        _controller.SetHorizontalForce(Mathf.Lerp(_controller.Velocity.x, _normalHorizontalSpeed * speed, Time.deltaTime * movementFactor));
+        if (IsDead)
+        {
+            _controller.SetHorizontalForce(0);
+        }
+        else
+        {
+            _controller.SetHorizontalForce(Mathf.Lerp(_controller.Velocity.x, _normalHorizontalSpeed * speed, Time.deltaTime * movementFactor));
+        }
+
+
+    }
+
+    public void Kill()
+    {
+
+        _controller.HandleCollisions = false;
+        GetComponent<Collider2D>().enabled = false;
+
+        IsDead = true;
+
+        _controller.SetForce(new Vector2(0, 20f));
+
 
     }
 
@@ -42,6 +69,10 @@ public class Player : MonoBehaviour
         {
             Flip();
         }
+
+        GetComponent<Collider2D>().enabled = true;
+        _controller.HandleCollisions = true;
+        IsDead = false;
 
         transform.position = spawnPoint.position;
 

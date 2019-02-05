@@ -13,6 +13,8 @@ public class CharacterController : MonoBehaviour
     public ControllerParamaters Parameters { get { return _OverrideParameters ?? DefaultParameters; } }
     public GameObject StandingOn { get; private set; }
 
+    public bool HandleCollisions { get; set; }
+
     private GameObject _lastStandingOn;
 
     BoxCollider2D _boxCollider2D;
@@ -39,6 +41,7 @@ public class CharacterController : MonoBehaviour
 
     private void Awake()
     {
+        HandleCollisions = true;
         State = new ControllerState2D();
 
         _boxCollider2D = GetComponent<BoxCollider2D>();
@@ -104,24 +107,27 @@ public class CharacterController : MonoBehaviour
 
         State.Reset();
 
-        Handleplatforms();
-
-        CalculateRayOrigins();
-
-        if (deltaMovement.y < 0 && wasGrounded)
+        if (HandleCollisions)
         {
-            HandleVerticalSlope(ref deltaMovement);
+            Handleplatforms();
+
+            CalculateRayOrigins();
+
+            if (deltaMovement.y < 0 && wasGrounded)
+            {
+                HandleVerticalSlope(ref deltaMovement);
+            }
+
+            if (Mathf.Abs(deltaMovement.x) > 0.0001f)
+            {
+                MoveHorizontaly(ref deltaMovement);
+            }
+
+            MoveVerticaly(ref deltaMovement);
+
+            CorrectHorizontalPlacement(ref deltaMovement, true);
+            CorrectHorizontalPlacement(ref deltaMovement, false);
         }
-
-        if (Mathf.Abs(deltaMovement.x) > 0.0001f)
-        {
-            MoveHorizontaly(ref deltaMovement);
-        }
-
-        MoveVerticaly(ref deltaMovement);
-
-        CorrectHorizontalPlacement(ref deltaMovement, true);
-        CorrectHorizontalPlacement(ref deltaMovement, false);
 
         _transform.Translate(deltaMovement, Space.World);
 
@@ -376,6 +382,13 @@ public class CharacterController : MonoBehaviour
 
         _raycastTopLeft = _transform.position + new Vector3(center.x - size.x + SkinWidth,
                                                             center.y + size.y - SkinWidth);
+
+    }
+
+    public void SetForce(Vector2 force)
+    {
+
+        _velocity = force;
 
     }
 
