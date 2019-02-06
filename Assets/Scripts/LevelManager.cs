@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System.Linq;
+using System;
 
 public class LevelManager : MonoBehaviour
 {
@@ -11,7 +12,27 @@ public class LevelManager : MonoBehaviour
     public Player player { get; private set; }
 
     private List<CheckPoint> _checkPoints;
-    private int currentCheckPointIndex; 
+    private int currentCheckPointIndex;
+
+    private DateTime _started;
+    private int _savedPoint;
+    public TimeSpan RunningTime
+    {
+        get
+        {
+            return DateTime.UtcNow - _started;
+        }
+    }
+    public int BonusCutoffSeconds = 10;
+    public int BonusSecondMultiplier = 3;
+    public int CurrentTimeBonus
+    {
+        get
+        {
+            var secondDifference = (int)(BonusCutoffSeconds - RunningTime.TotalSeconds);
+            return Mathf.Max(0, secondDifference) * BonusSecondMultiplier;
+        }
+    }
 
     private void Awake()
     {
@@ -21,6 +42,8 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _started = DateTime.UtcNow;
+
         _checkPoints = FindObjectsOfType<CheckPoint>().OrderBy(t => t.transform.position.x).ToList<CheckPoint>();
 
         currentCheckPointIndex = _checkPoints.Count > 0 ? 0 : -1;
@@ -49,6 +72,9 @@ public class LevelManager : MonoBehaviour
 
         currentCheckPointIndex++;
 
+        GameMenager.Instance.addPoint(CurrentTimeBonus);
+        _savedPoint = GameMenager.Instance.point;
+        _started = DateTime.UtcNow;
     }
 
     public void KillPlayer()
@@ -64,7 +90,13 @@ public class LevelManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        _checkPoints[currentCheckPointIndex].SpawnPlayer(player);
+        if (currentCheckPointIndex != -1)
+        {
+            _checkPoints[currentCheckPointIndex].SpawnPlayer(player);
+        }
+
+        _started = DateTime.UtcNow;
+        GameMenager.Instance.resetPoint(_savedPoint);
 
     }
 }
