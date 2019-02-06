@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
 
         IsDead = true;
 
-        _controller.SetForce(new Vector2(0, 20f));
+        _controller.SetForce(new Vector2(0, 10f));
 
 
     }

@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public Player player { get; private set; }
 
     private List<CheckPoint> _checkPoints;
+    private int currentCheckPointIndex; 
 
     private void Awake()
     {
@@ -21,13 +22,33 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         _checkPoints = FindObjectsOfType<CheckPoint>().OrderBy(t => t.transform.position.x).ToList<CheckPoint>();
+
+        currentCheckPointIndex = _checkPoints.Count > 0 ? 0 : -1;
+
         player = FindObjectOfType<Player>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+        var isAtLastCheckpoint = currentCheckPointIndex + 1 >= _checkPoints.Count;
+
+        if (isAtLastCheckpoint)
+        {
+            //LEVEL DONE!
+            return;
+        }
+
+        var distanceToNextCheckpoint = _checkPoints[currentCheckPointIndex + 1].transform.position.x - player.transform.position.x;
+
+        if (distanceToNextCheckpoint >= 0)
+        {
+            return;
+        }
+
+        currentCheckPointIndex++;
+
     }
 
     public void KillPlayer()
@@ -41,9 +62,9 @@ public class LevelManager : MonoBehaviour
     {
         player.Kill();
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
-        _checkPoints[0].SpawnPlayer(player);
+        _checkPoints[currentCheckPointIndex].SpawnPlayer(player);
 
     }
 }
