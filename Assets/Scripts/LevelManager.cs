@@ -49,6 +49,25 @@ public class LevelManager : MonoBehaviour
         currentCheckPointIndex = _checkPoints.Count > 0 ? 0 : -1;
 
         player = FindObjectOfType<Player>();
+
+        var listener = FindObjectsOfType<MonoBehaviour>().OfType<IPlayerRespawnListener>();
+
+        foreach (var item in listener)
+        {
+            for (int i = _checkPoints.Count - 1; i >= 0; i--)
+            {
+                var distance = ((MonoBehaviour)item).transform.position.x - _checkPoints[i].transform.position.x;
+                if (distance < 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    _checkPoints[i].AssignObjectToCheckPoint(item);
+                    break;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
