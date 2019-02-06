@@ -5,11 +5,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    public GameObject OuchEffect;
+
     public float speed = 8f;
     public float SpeedAccelerationOnGround = 10f;
     public float SpeedAccelerationInAir = 5f;
 
     public bool IsDead { get; private set; }
+
+    public int MaxHealth = 100;
+    public int Health { get; private set; }
 
     CharacterController _controller;
 
@@ -17,6 +23,11 @@ public class Player : MonoBehaviour
 
     bool _isFacingRight;
 
+
+    private void Awake()
+    {
+        Health = MaxHealth;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +70,20 @@ public class Player : MonoBehaviour
 
         _controller.SetForce(new Vector2(0, 10f));
 
+        Health = 0;
+    }
 
+    public void TakeDamage (int damage)
+    {
+
+        Instantiate(OuchEffect, transform.position, transform.rotation);
+
+        Health -= damage;
+
+        if (Health <= 0)
+        {
+            LevelManager.Instance.KillPlayer();
+        }
     }
 
     public void RespawnAt(Transform spawnPoint)
@@ -76,6 +100,7 @@ public class Player : MonoBehaviour
 
         transform.position = spawnPoint.position;
 
+        Health = MaxHealth;
     }
 
     private void HandleInput()
