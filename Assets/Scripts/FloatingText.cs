@@ -6,6 +6,7 @@ public class FloatingText : MonoBehaviour
 {
     private GUIContent _content;
     private static readonly GUISkin skin = Resources.Load<GUISkin>("Game GUISkin");
+    private IFloatingTextPositioner _positioner;
 
     public GUIStyle Style { get; set; }
 
@@ -21,7 +22,7 @@ public class FloatingText : MonoBehaviour
         
     }
 
-    public static void Show(string text, string style)
+    public static void Show(string text, string style, IFloatingTextPositioner positioner)
     {
 
         var go = new GameObject("FloatingText");
@@ -29,12 +30,24 @@ public class FloatingText : MonoBehaviour
 
         floatingText._content = new GUIContent(text);
         floatingText.Style = skin.GetStyle(style);
+
+        floatingText._positioner = positioner;
     }
 
     public void OnGUI()
     {
+        var position = new Vector2();
+        var contentSize = Style.CalcSize(_content);
 
-        GUI.Label(new Rect(100, 100, 50, 50), _content, Style);
+        if (!_positioner.GetPosition(ref position, _content, contentSize))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+
+
+        GUI.Label(new Rect(position, contentSize), _content, Style);
 
     }
 }
