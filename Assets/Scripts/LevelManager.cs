@@ -90,6 +90,7 @@ public class LevelManager : MonoBehaviour
         }
 
         currentCheckPointIndex++;
+        _checkPoints[currentCheckPointIndex].PlayerHitCheckPoint();
 
         GameMenager.Instance.addPoint(CurrentTimeBonus);
         _savedPoint = GameMenager.Instance.point;
