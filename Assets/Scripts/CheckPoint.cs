@@ -45,7 +45,7 @@ public class CheckPoint : MonoBehaviour
     public void PlayerHitCheckPoint()
     {
 
-        FloatingText.Show();
+        FloatingText.Show("CheckPoint!!", "CheckPointsText");
 
     }
 
