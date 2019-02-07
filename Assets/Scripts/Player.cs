@@ -84,6 +84,8 @@ public class Player : MonoBehaviour
         {
             LevelManager.Instance.KillPlayer();
         }
+
+        FloatingText.Show(string.Format("-{0}!", damage), "PlayerTakeDamageText", new FromWorldPointTextPositioner(Camera.main, transform.position, 2f, 60));
     }
 
     public void RespawnAt(Transform spawnPoint)
