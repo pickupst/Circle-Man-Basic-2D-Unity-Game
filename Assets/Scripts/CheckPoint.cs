@@ -45,8 +45,16 @@ public class CheckPoint : MonoBehaviour
     public void PlayerHitCheckPoint()
     {
 
-        FloatingText.Show("CheckPoint!!", "CheckPointsText", new CenteredTextPositioner(.2f));
+        StartCoroutine(PlayerHitCheckPointCO(LevelManager.Instance.CurrentTimeBonus));
 
+    }
+
+    public IEnumerator PlayerHitCheckPointCO (int bonus)
+    {
+
+        FloatingText.Show("CheckPoint!!", "CheckPointsText", new CenteredTextPositioner(.2f));
+        yield return new WaitForSeconds(.3f);
+        FloatingText.Show(string.Format("+{0} time bonus!", bonus), "CheckPointsText", new CenteredTextPositioner(.2f));
     }
 
 }
