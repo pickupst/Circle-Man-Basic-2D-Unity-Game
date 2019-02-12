@@ -4927,9 +4927,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OuchEffect: {fileID: 2925294263322426205, guid: 1e11b6f4f236a104fa37f1969b7465c3,
     type: 3}
+  projectile: {fileID: 4976737022437156773, guid: 7091a55ffce03d142b2695aeb322590f,
+    type: 3}
   speed: 12
   SpeedAccelerationOnGround: 10
   SpeedAccelerationInAir: 5
+  MaxHealth: 100
 --- !u!114 &8867178757661098563
 MonoBehaviour:
   m_ObjectHideFlags: 0

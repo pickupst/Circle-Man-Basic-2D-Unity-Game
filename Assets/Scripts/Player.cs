@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 {
 
     public GameObject OuchEffect;
+    public Projectile projectile;
+
+    public Transform projectileFireLocation;
 
     public float speed = 8f;
     public float SpeedAccelerationOnGround = 10f;
@@ -133,6 +136,18 @@ public class Player : MonoBehaviour
         {
             _controller.Jump();
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            FireProjectile();
+        }
+    }
+
+    private void FireProjectile()
+    {
+        var projectile2 = (Projectile) Instantiate(projectile, projectileFireLocation.position, projectileFireLocation.rotation);
+
+        
     }
 
     private void Flip()
