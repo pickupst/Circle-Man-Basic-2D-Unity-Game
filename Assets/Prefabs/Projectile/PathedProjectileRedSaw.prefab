@@ -94,6 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5746d179f995ba47a79a5afbf40b975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 6696329383692819444, guid: 98cda7482a6ab6b4aabe5f7277d140c7,
+    type: 3}
 --- !u!114 &1317283708497620769
 MonoBehaviour:
   m_ObjectHideFlags: 0

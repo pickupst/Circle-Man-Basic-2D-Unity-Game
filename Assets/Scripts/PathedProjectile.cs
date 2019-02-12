@@ -8,6 +8,7 @@ public class PathedProjectile : MonoBehaviour
     private Transform _destination;
     private float _speed;
 
+    public GameObject destroyEffect;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,11 @@ public class PathedProjectile : MonoBehaviour
         if (distanceSquared > 0.1f * 0.1f)
         {
             return;
+        }
+
+        if (destroyEffect != null)
+        {
+            Instantiate(destroyEffect, transform.position, transform.rotation);
         }
 
         Destroy(gameObject);

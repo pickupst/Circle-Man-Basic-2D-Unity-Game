@@ -10,6 +10,9 @@ public class PathedProjectileSpawner : MonoBehaviour
     public float speed = 6;
     public float FireRate = 2f;
 
+    public GameObject spawnEffect;
+
+
     private float _nextShotInSecond;
     // Start is called before the first frame update
     void Start()
@@ -31,6 +34,11 @@ public class PathedProjectileSpawner : MonoBehaviour
         var projectile = (PathedProjectile)Instantiate(Projectile, transform.position, transform.rotation);
 
         projectile.Initialize(Destination, speed);
+
+        if (spawnEffect != null)
+        {
+            Instantiate(spawnEffect, transform.position,transform.rotation);
+        }
     }
 
     private void OnDrawGizmos()
