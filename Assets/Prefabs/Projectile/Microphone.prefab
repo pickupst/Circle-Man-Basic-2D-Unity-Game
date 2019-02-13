@@ -98,7 +98,8 @@ MonoBehaviour:
   Owner: {fileID: 0}
   CollisionMask:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 5376
+  Damage: 10
   DestroyedEffect: {fileID: 3281006753965126991, guid: d8af1a69f54ef3b48941af1665379893,
     type: 3}
   TimeToLive: 10

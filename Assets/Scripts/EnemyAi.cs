@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAi : MonoBehaviour
+public class EnemyAi : MonoBehaviour, ITakeDamage
 {
+    public GameObject DestroyedEffect;
+
     public float speed = 9f;
     public float fireRate = 1f;
 
@@ -12,6 +14,14 @@ public class EnemyAi : MonoBehaviour
     private CharacterController _controller;
     private Vector2 _direction;
     private float canFireRate;
+
+    public void TakeDamage(int damage, GameObject instigator)
+    {
+
+        Instantiate(DestroyedEffect,  transform.position, transform.rotation);
+        gameObject.SetActive(false);
+
+    }
 
 
     // Start is called before the first frame update
@@ -38,6 +48,13 @@ public class EnemyAi : MonoBehaviour
 
         if (canFireRate < 0)
         {
+
+            var rayCast = Physics2D.Raycast(transform.position, _direction, 30, 1 << LayerMask.NameToLayer("Player"));
+            if (!rayCast)
+            {
+                return;
+            }
+
             var projectile = (Projectile)Instantiate(Projectile, transform.position, transform.rotation);
             projectile.Initialize(gameObject, _direction, _controller.Velocity);
             canFireRate = fireRate;
