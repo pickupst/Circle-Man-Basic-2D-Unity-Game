@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SimpleProjectile : Projectile, ITakeDamage
 {
+    public int Damage = 10;
+
     public GameObject DestroyedEffect;
 
     public float TimeToLive = 10;
@@ -38,4 +40,20 @@ public class SimpleProjectile : Projectile, ITakeDamage
 
         Destroy(gameObject);
     }
+
+
+    protected override void OnCollideOther(Collider2D other)
+    {
+
+        DestroyProjectile();
+
+    }
+
+    protected override void OnCollideTakeDamage(Collider2D other, ITakeDamage takeDamage)
+    {
+
+        takeDamage.TakeDamage(Damage, gameObject);
+        DestroyProjectile();
+    }
+
 }

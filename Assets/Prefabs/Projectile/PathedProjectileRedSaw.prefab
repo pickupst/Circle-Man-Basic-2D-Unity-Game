@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4165824915741541106}
   - component: {fileID: 1317283708497620769}
   - component: {fileID: 9168363227394290752}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PathedProjectileRedSaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}

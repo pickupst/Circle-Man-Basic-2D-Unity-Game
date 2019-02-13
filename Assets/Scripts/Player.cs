@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
 
     public GameObject OuchEffect;
+    public GameObject FireProjectileEffect;
+
     public Projectile projectile;
 
     public Transform projectileFireLocation;
@@ -145,9 +147,18 @@ public class Player : MonoBehaviour
 
     private void FireProjectile()
     {
+
+        if (FireProjectileEffect != null)
+        {
+            var effect = (GameObject)Instantiate(FireProjectileEffect, projectileFireLocation.position, projectileFireLocation.rotation);
+            effect.transform.parent = transform;
+        }
+
         var projectile2 = (Projectile) Instantiate(projectile, projectileFireLocation.position, projectileFireLocation.rotation);
 
-        
+        var direction = _isFacingRight ? Vector2.right : -Vector2.right;
+
+        projectile2.Initialize(gameObject, direction, _controller.Velocity);
     }
 
     private void Flip()

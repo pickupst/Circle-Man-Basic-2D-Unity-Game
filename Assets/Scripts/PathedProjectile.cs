@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathedProjectile : MonoBehaviour
+public class PathedProjectile : MonoBehaviour, ITakeDamage
 {
     private Transform _destination;
     private float _speed;
@@ -31,7 +31,7 @@ public class PathedProjectile : MonoBehaviour
         if (destroyEffect != null)
         {
             Instantiate(destroyEffect, transform.position, transform.rotation);
-        }
+        } 
 
         Destroy(gameObject);
     }
@@ -40,5 +40,14 @@ public class PathedProjectile : MonoBehaviour
     {
         _destination = destination;
         _speed = speed;
+    }
+
+    public void TakeDamage(int damage, GameObject instigator)
+    {
+        if (destroyEffect != null)
+        {
+            Instantiate(destroyEffect, transform.position, transform.rotation);
+        }
+        Destroy(gameObject);
     }
 }
