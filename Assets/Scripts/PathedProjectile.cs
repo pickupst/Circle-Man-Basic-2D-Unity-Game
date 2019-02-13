@@ -9,6 +9,7 @@ public class PathedProjectile : MonoBehaviour, ITakeDamage
     private float _speed;
 
     public GameObject destroyEffect;
+    public int PointsToGivePlayer = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +49,16 @@ public class PathedProjectile : MonoBehaviour, ITakeDamage
         {
             Instantiate(destroyEffect, transform.position, transform.rotation);
         }
+
         Destroy(gameObject);
+
+        var projectile = instigator.GetComponent<Projectile>();
+
+        if (projectile != null && projectile.Owner.GetComponent<Player>() != null && PointsToGivePlayer != 0)
+        {
+            GameMenager.Instance.addPoint(PointsToGivePlayer);
+
+            FloatingText.Show(string.Format("+{0}!", PointsToGivePlayer), "PointStarText", new FromWorldPointTextPositioner(Camera.main, transform.position, 1.5f, 50));
+        }
     }
 }

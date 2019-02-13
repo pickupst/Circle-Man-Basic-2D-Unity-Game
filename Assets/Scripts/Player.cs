@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
     public Transform projectileFireLocation;
 
+    public float fireRate = 0.5f;
     public float speed = 8f;
     public float SpeedAccelerationOnGround = 10f;
     public float SpeedAccelerationInAir = 5f;
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour
 
     CharacterController _controller;
 
+    float _CanFireIn;
+
     int _normalHorizontalSpeed;
 
     bool _isFacingRight;
@@ -31,6 +34,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        _CanFireIn = fireRate;
         Health = MaxHealth;
     }
 
@@ -45,6 +49,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        _CanFireIn -= Time.deltaTime;
 
         if (!IsDead)
         {
@@ -147,6 +153,10 @@ public class Player : MonoBehaviour
 
     private void FireProjectile()
     {
+        if (_CanFireIn > 0)
+        {
+            return;
+        }
 
         if (FireProjectileEffect != null)
         {
@@ -159,6 +169,8 @@ public class Player : MonoBehaviour
         var direction = _isFacingRight ? Vector2.right : -Vector2.right;
 
         projectile2.Initialize(gameObject, direction, _controller.Velocity);
+
+        _CanFireIn = fireRate;
     }
 
     private void Flip()
