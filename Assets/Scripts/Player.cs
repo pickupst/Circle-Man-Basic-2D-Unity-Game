@@ -23,6 +23,13 @@ public class Player : MonoBehaviour, ITakeDamage
     public int MaxHealth = 100;
     public int Health { get; private set; }
 
+    public void GiveHealth(int healthToGive, GameObject gameObject)
+    {
+        FloatingText.Show(string.Format("+{0}!", healthToGive), "GotHealthText", new FromWorldPointTextPositioner(Camera.main, transform.position, 2f, 60f));
+
+        Health = Mathf.Min(Health + healthToGive, MaxHealth);
+    }
+
     CharacterController _controller;
 
     float _CanFireIn;
