@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ITakeDamage
 {
 
     public GameObject OuchEffect;
@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
         Health = 0;
     }
 
-    public void TakeDamage (int damage)
+    public void TakeDamage (int damage, GameObject instigator)
     {
 
         Instantiate(OuchEffect, transform.position, transform.rotation);

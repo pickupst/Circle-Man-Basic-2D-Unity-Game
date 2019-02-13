@@ -22,7 +22,7 @@ public class GiveDamageToPlayer : MonoBehaviour
             return;
         }
 
-        player.TakeDamage(DamageToGive);
+        player.TakeDamage(DamageToGive, gameObject);
 
 
         var controller = player.GetComponent<CharacterController>();

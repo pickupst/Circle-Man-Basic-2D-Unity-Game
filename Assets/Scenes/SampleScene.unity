@@ -4516,6 +4516,7 @@ GameObject:
   - component: {fileID: 1495455615}
   - component: {fileID: 1495455614}
   - component: {fileID: 1495455619}
+  - component: {fileID: 1495455620}
   m_Layer: 0
   m_Name: Bad Fish
   m_TagString: Untagged
@@ -4667,6 +4668,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 9
+--- !u!114 &1495455620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495455613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388b1f6db6c5a294f8783dea2ab1ba20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lastPosition: {x: 0, y: 0}
+  _velocity: {x: 0, y: 0}
+  DamageToGive: 25
 --- !u!1001 &1540088650
 PrefabInstance:
   m_ObjectHideFlags: 0
