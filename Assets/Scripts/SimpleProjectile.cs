@@ -6,16 +6,31 @@ using UnityEngine;
 public class SimpleProjectile : Projectile, ITakeDamage
 {
     public int Damage = 10;
+    public int PointsToGivePlayer = 5;
 
     public GameObject DestroyedEffect;
 
     public float TimeToLive = 10;
 
 
-    public void TakeDamage(int damage, GameObject instigator)
+    public void TakeDamage(int damage, GameObject instigator)   
     {
+        if (PointsToGivePlayer == 0)
+        {
+            return;
+        }
 
 
+        var projectile = instigator.GetComponent<Projectile>();
+
+        if (projectile != null && projectile.Owner.GetComponent<Player>() != null && PointsToGivePlayer != 0)
+        {
+            GameMenager.Instance.addPoint(PointsToGivePlayer);
+
+            FloatingText.Show(string.Format("+{0}!", PointsToGivePlayer), "PointStarText", new FromWorldPointTextPositioner(Camera.main, transform.position, 1.5f, 50));
+        }
+
+        DestroyProjectile();
 
     }
 

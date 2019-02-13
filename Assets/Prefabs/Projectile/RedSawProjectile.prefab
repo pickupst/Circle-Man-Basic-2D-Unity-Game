@@ -137,6 +137,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1280
   Damage: 15
+  PointsToGivePlayer: 5
   DestroyedEffect: {fileID: 2925294263322426205, guid: 1e11b6f4f236a104fa37f1969b7465c3,
     type: 3}
   TimeToLive: 15

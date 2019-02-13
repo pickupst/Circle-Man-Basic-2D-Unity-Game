@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAi : MonoBehaviour, ITakeDamage
+public class EnemyAi : MonoBehaviour, ITakeDamage, IPlayerRespawnListener
 {
     public GameObject DestroyedEffect;
 
+    public Vector2 _startPostion;
+
     public float speed = 9f;
     public float fireRate = 1f;
+    public int PointsToGivePlayer = 15;
 
     public Projectile Projectile;
 
@@ -15,8 +18,30 @@ public class EnemyAi : MonoBehaviour, ITakeDamage
     private Vector2 _direction;
     private float canFireRate;
 
+    public void OnPlayerRespawnInThisCheckPoint()
+    {
+        if (!gameObject.activeSelf)
+        {
+            _direction = new Vector2(-1, 0);
+            transform.localScale = new Vector3(1, 1, 1);
+            transform.position = _startPostion;
+            gameObject.SetActive(true);
+        }
+        
+    }
+
     public void TakeDamage(int damage, GameObject instigator)
     {
+        if (PointsToGivePlayer != 0)
+        {
+            var projectile = instigator.GetComponent<Projectile>();
+
+            if (projectile != null && projectile.Owner.GetComponent<Player>() != null)
+            {
+                GameMenager.Instance.addPoint(PointsToGivePlayer);
+                FloatingText.Show(string.Format("+{0}!", PointsToGivePlayer), "PointStarText", new FromWorldPointTextPositioner(Camera.main, transform.position, 1.5f, 50));
+            }
+        }
 
         Instantiate(DestroyedEffect,  transform.position, transform.rotation);
         gameObject.SetActive(false);
@@ -27,6 +52,7 @@ public class EnemyAi : MonoBehaviour, ITakeDamage
     // Start is called before the first frame update
     void Start()
     {
+        _startPostion = transform.position;
         canFireRate = fireRate;
         _controller = GetComponent<CharacterController>();
         _direction = new Vector2(-1, 0);
