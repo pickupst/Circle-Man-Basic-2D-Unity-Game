@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, ITakeDamage
 {
+    public AudioClip playerHitSound, playerShootSound, playerHealthSound;
 
     public GameObject OuchEffect;
     public GameObject FireProjectileEffect;
@@ -25,6 +26,8 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void GiveHealth(int healthToGive, GameObject gameObject)
     {
+        AudioSource.PlayClipAtPoint(playerHealthSound, transform.position);
+
         FloatingText.Show(string.Format("+{0}!", healthToGive), "GotHealthText", new FromWorldPointTextPositioner(Camera.main, transform.position, 2f, 60f));
 
         Health = Mathf.Min(Health + healthToGive, MaxHealth);
@@ -93,6 +96,7 @@ public class Player : MonoBehaviour, ITakeDamage
 
     public void TakeDamage (int damage, GameObject instigator)
     {
+        AudioSource.PlayClipAtPoint(playerHitSound, transform.position);
 
         Instantiate(OuchEffect, transform.position, transform.rotation);
 
@@ -160,6 +164,8 @@ public class Player : MonoBehaviour, ITakeDamage
 
     private void FireProjectile()
     {
+
+
         if (_CanFireIn > 0)
         {
             return;
@@ -178,6 +184,10 @@ public class Player : MonoBehaviour, ITakeDamage
         projectile2.Initialize(gameObject, direction, _controller.Velocity);
 
         _CanFireIn = fireRate;
+
+
+        AudioSource.PlayClipAtPoint(playerShootSound, transform.position);
+
     }
 
     private void Flip()

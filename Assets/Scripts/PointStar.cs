@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PointStar : MonoBehaviour, IPlayerRespawnListener
 {
+    public AudioClip hitStarSound;
+
     public GameObject Effect;
     public int PointToAdd = 10;
 
@@ -16,6 +18,7 @@ public class PointStar : MonoBehaviour, IPlayerRespawnListener
     {
         if (collision.gameObject.tag == "Player")
         {
+            AudioSource.PlayClipAtPoint(hitStarSound, transform.position);
 
             GameMenager.Instance.addPoint(PointToAdd);
             Instantiate(Effect, transform.position, transform.rotation);

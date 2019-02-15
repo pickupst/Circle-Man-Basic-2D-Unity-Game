@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class JumpPlatform : MonoBehaviour
 {
+    public AudioClip jumpSound;
+
     public float jumpMangnitude = 30;
 
     public void ControllerEnter2D (CharacterController controller)
     {
-
+        AudioSource.PlayClipAtPoint(jumpSound, transform.position);
         controller.SetVerticalForce(jumpMangnitude);
 
     }

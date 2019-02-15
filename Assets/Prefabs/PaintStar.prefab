@@ -140,5 +140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d87eeb01c2e1e2242925c8c8c5c78820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitStarSound: {fileID: 8300000, guid: fbbd93450bf5c3345a4fa80cb64f48e5, type: 3}
   Effect: {fileID: 3281006753965126991, guid: d8af1a69f54ef3b48941af1665379893, type: 3}
   PointToAdd: 10

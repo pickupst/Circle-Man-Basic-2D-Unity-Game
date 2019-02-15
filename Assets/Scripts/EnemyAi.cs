@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyAi : MonoBehaviour, ITakeDamage, IPlayerRespawnListener
 {
+    public AudioClip shootSound;
+
     public GameObject DestroyedEffect;
 
     public Vector2 _startPostion;
@@ -70,6 +72,7 @@ public class EnemyAi : MonoBehaviour, ITakeDamage, IPlayerRespawnListener
         {
             _direction = -_direction;
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            AudioSource.PlayClipAtPoint(shootSound, transform.position);
         }
 
         if (canFireRate < 0)
@@ -85,6 +88,8 @@ public class EnemyAi : MonoBehaviour, ITakeDamage, IPlayerRespawnListener
             projectile.Initialize(gameObject, _direction, _controller.Velocity);
             canFireRate = fireRate;
         }
+
         
+
     }
 }

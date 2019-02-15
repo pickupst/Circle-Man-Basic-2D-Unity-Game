@@ -136,6 +136,7 @@ MonoBehaviour:
   CollisionMask:
     serializedVersion: 2
     m_Bits: 1280
+  DestroySound: {fileID: 8300000, guid: cb5ded8fb700efc4b8a1b718f1d0dcc0, type: 3}
   Damage: 15
   PointsToGivePlayer: 5
   DestroyedEffect: {fileID: 2925294263322426205, guid: 1e11b6f4f236a104fa37f1969b7465c3,

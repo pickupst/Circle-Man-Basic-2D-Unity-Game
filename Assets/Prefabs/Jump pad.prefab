@@ -69,7 +69,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1007902817
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300018, guid: 53b68b6f450e542419e4f2de8fff0688, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a9fffa7c19ad6478e26dfa3ec91622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpSound: {fileID: 8300000, guid: 5b84f237233a0df4c98d6989a6af6871, type: 3}
   jumpMangnitude: 30
 --- !u!61 &6286540440898211211
 BoxCollider2D:

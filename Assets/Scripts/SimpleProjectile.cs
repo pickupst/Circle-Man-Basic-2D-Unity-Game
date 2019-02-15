@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SimpleProjectile : Projectile, ITakeDamage
 {
+    public AudioClip DestroySound;
+
     public int Damage = 10;
     public int PointsToGivePlayer = 5;
 
@@ -53,6 +55,7 @@ public class SimpleProjectile : Projectile, ITakeDamage
             Instantiate(DestroyedEffect, transform.position, transform.rotation);
         }
 
+        AudioSource.PlayClipAtPoint(DestroySound, transform.position);
         Destroy(gameObject);
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathedProjectileSpawner : MonoBehaviour
 {
+    public AudioClip spawnSound;
 
     public Transform Destination;
     public PathedProjectile Projectile;
@@ -37,6 +38,7 @@ public class PathedProjectileSpawner : MonoBehaviour
 
         if (spawnEffect != null)
         {
+            AudioSource.PlayClipAtPoint(spawnSound, transform.position);
             Instantiate(spawnEffect, transform.position,transform.rotation);
         }
     }
