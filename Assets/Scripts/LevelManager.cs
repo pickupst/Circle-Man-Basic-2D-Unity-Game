@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        _savedPoint = GameMenager.Instance.point;
         Instance = this;
     }
 
