@@ -19,6 +19,8 @@ public class StartScript : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            GameMenager.Instance.Reset();
+
             SceneManager.LoadScene(firstLevel);
             //Application.LoadLevel(firstLevel);
         }

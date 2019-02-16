@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
 
@@ -95,6 +95,35 @@ public class LevelManager : MonoBehaviour
         GameMenager.Instance.addPoint(CurrentTimeBonus);
         _savedPoint = GameMenager.Instance.point;
         _started = DateTime.UtcNow;
+    }
+
+    public void GotoNextLevel(String levelName)
+    {
+
+        StartCoroutine(GotoNextLevelCO(levelName));
+
+    }
+
+    private IEnumerator GotoNextLevelCO(string levelName)
+    {
+
+        player.FinishLevel();
+        GameMenager.Instance.addPoint(CurrentTimeBonus);
+
+        FloatingText.Show("Level Complete!", "CheckPointsText", new CenteredTextPositioner(.2f));
+        yield return new WaitForSeconds(1f);
+        FloatingText.Show(string.Format("{0} Points!", GameMenager.Instance.point), "CheckPointsText", new CenteredTextPositioner(.1f));
+
+        yield return new WaitForSeconds(5f);
+
+        if (string.IsNullOrEmpty(levelName))
+        {
+            SceneManager.LoadScene("_StartScreen");
+        }
+        else
+        {
+            SceneManager.LoadScene(levelName);
+        }
     }
 
     public void KillPlayer()

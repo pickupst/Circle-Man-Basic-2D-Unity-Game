@@ -198,6 +198,15 @@ public class Player : MonoBehaviour, ITakeDamage
         _isFacingRight = transform.localScale.x > 0;
 
     }
+
+    public void FinishLevel()
+    {
+
+        enabled = false;
+        _controller.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+
+    }
 }
 
 
