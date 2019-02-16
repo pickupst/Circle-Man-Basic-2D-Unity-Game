@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PathedProjectileSpawner : MonoBehaviour
 {
+
+    public Animator animator;
     public AudioClip spawnSound;
 
     public Transform Destination;
@@ -30,6 +32,12 @@ public class PathedProjectileSpawner : MonoBehaviour
         {
             return;
         }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Fire");
+        }
+
         _nextShotInSecond = FireRate;
 
         var projectile = (PathedProjectile)Instantiate(Projectile, transform.position, transform.rotation);
@@ -41,6 +49,8 @@ public class PathedProjectileSpawner : MonoBehaviour
             AudioSource.PlayClipAtPoint(spawnSound, transform.position);
             Instantiate(spawnEffect, transform.position,transform.rotation);
         }
+
+       
     }
 
     private void OnDrawGizmos()
