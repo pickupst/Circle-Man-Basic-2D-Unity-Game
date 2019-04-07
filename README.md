@@ -1,6 +1,5 @@
 # Circle-Man-Basic-2D-Unity-Game
 
-I used JavaScript. I made a connection using port with Nodejs. I used the Phaser library. I wanted to learn a new technology.
 
 (Video)
 
